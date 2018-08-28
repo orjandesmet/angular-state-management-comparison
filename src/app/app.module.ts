@@ -9,7 +9,9 @@ import { ItemDetailComponent } from './components/item-detail/item-detail.compon
 import { ListItemComponent } from './components/list-item/list-item.component';
 import { ListComponent } from './components/list/list.component';
 import { SecondsToDatePipe } from './pipe/seconds-to-date.pipe';
+import { TODO_ITEM_STORAGE } from './service/todo-item-storage';
 import { MaterialModule } from './shared/material/material.module';
+import { TodoItemStorageRxJs } from './statemanagement/todo-item-storage-rxjs';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { MaterialModule } from './shared/material/material.module';
     MaterialModule,
     FlexLayoutModule,
   ],
-  providers: [],
+  providers: [
+    { provide: TODO_ITEM_STORAGE, useClass: TodoItemStorageRxJs }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
