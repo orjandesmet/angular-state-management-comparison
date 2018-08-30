@@ -1,0 +1,38 @@
+<form (ngSubmit)="submit()" [formGroup]="addFormGroup">
+  <mat-form-field>
+    <input matInput formControlName="name" placeholder="Add an item">
+  </mat-form-field>
+  <button type="submit" mat-raised-button color="primary">Add</button>
+</form>
+<div fxLayout="row" style="margin-bottom:2rem">
+  <div *ngIf="sort$ | async as sort">
+    Sort by:
+    <mat-button-toggle-group [value]="sort.field">
+      <mat-button-toggle [value]="sortableField.key" *ngFor="let sortableField of sortableFields" (click)="onSortChange(sortableField.key)">
+        {{ sortableField.label }} <mat-icon *ngIf="sort.field === sortableField.key && sort.ascending">arrow_drop_up</mat-icon><mat-icon *ngIf="sort.field === sortableField.key && !sort.ascending">arrow_drop_down</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <div style="margin-left:2rem">
+    Filter:
+    <mat-button-toggle-group  [value]="filter$ | async" (change)="onFilterChange($event)">
+      <mat-button-toggle value="all">
+        All
+      </mat-button-toggle>
+      <mat-button-toggle value="complete">
+        Complete
+      </mat-button-toggle>
+      <mat-button-toggle value="incomplete">
+        Incomplete
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</div>
+<ng-container *ngFor="let item of todoItems$ | async">
+  <todo-list-item [item]="item" (toggleItemCompleted)="toggleItemCompleted($event)" (delete)="deleteTodoItem($event)"></todo-list-item>
+</ng-container>
+<ng-container *ngIf="!(hasTodoItems$ | async)">
+  <mat-card>
+    <mat-card-title>Nothing found with this filter</mat-card-title>
+  </mat-card>
+</ng-container>

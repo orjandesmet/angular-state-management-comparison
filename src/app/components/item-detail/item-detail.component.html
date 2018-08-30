@@ -1,0 +1,32 @@
+<ng-container *ngIf="item$ | async as item; else itemNotFound">
+  <mat-card>
+    <mat-card-title fxLayout="row">
+        <mat-checkbox (change)="onCheckboxClicked(item.id)" [checked]="item.completedDateTime">{{ item.name }}</mat-checkbox>
+    </mat-card-title>
+    <mat-card-content>
+      <div>Created: {{ item.createdDateTime | secondsToDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+      <div *ngIf="item.completedDateTime">Completed: {{ item.completedDateTime | secondsToDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+    </mat-card-content>
+    <mat-card-actions>
+        <a mat-raised-button routerLink="/">
+          <mat-icon>navigate_before</mat-icon>
+          BACK
+        </a>
+      <button mat-raised-button color="warn" (click)="removeItem(item.id)">
+        <mat-icon>delete</mat-icon>
+        DELETE
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</ng-container>
+<ng-template #itemNotFound>
+  <mat-card>
+    <mat-card-title>Item does not exist</mat-card-title>
+    <mat-card-actions>
+      <a mat-raised-button routerLink="/">
+        <mat-icon>navigate_before</mat-icon>
+        BACK
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
