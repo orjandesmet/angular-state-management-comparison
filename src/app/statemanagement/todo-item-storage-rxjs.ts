@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, OperatorFunction, Subject } from 'rxjs';
-import { distinctUntilChanged, first, map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { FakeBackendService } from '../data/fake-backend.service';
 import { convertDateToSeconds } from '../model/date-time-seconds';
 import { ItemFilter } from '../model/item-filter.enum';
@@ -67,12 +67,9 @@ export class TodoItemStorageRxJs implements TodoItemStorage {
     this.filterSubj$.next(filter);
   }
 
-  private updateSubject<T>(source$: Subject<T>, operator: OperatorFunction<T, T>) {
-    source$
-      .pipe(
-        first(),
-        operator,
-      )
-      .subscribe(data => source$.next(data));
+  private updateSubject<T>(source$: BehaviorSubject<T>, operator: (s: T) => T) {
+    const currentValue: T = source$.getValue();
+    const newValue: T = operator(currentValue);
+    source$.next(newValue);
   }
 }
